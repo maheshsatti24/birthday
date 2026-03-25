@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>You Are My Life</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to top right, #0f2027, #203a43, #2c5364);
+      overflow-x: hidden;
+      color: white;
+      text-align: center;
+    }
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 2s ease-in;
+    }
+    .hero h1 {
+      font-size: 3em;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    .hero p {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #00ffff;
+      }
+      to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #00ccff;
+      }
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .envelope {
+      margin-top: 30px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    .love-letter {
+      display: none;
+      padding: 20px;
+      max-width: 600px;
+      margin: 40px auto;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      font-size: 1.2em;
+      animation: fadeIn 1s ease-in-out;
+      white-space: pre-line;
+      text-align: left;
+    }
+    button {
+      background: #00ccff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 20px;
+      color: white;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0099cc;
+    }
+    .fireworks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: transparent;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>You Are My Life!</h1>
+    <p>Happy Birthday to you Amma❤️!</p>
+    <div class="envelope">
+      <button onclick="openLetter()">You have a love letter</button>
+    </div>
+  </div>
+
+  <div class="love-letter" id="letter">
+    My dearest love,<br><br>
+    Since the day you entered my life, every day has felt like a festival. Your smile, your voice, your eyes – they are my blessings. <br><br>
+    On your birthday, I want you to know… I love you endlessly. <br>
+    Every moment with you feels like a beautiful story. <br><br>
+    I dedicate my whole life to you. <br><br>
+    Nvu ante yii chala estam amma naku uu.. Kani nvu naa amma vi ee fix ayipoya aa. <br><br>
+    anduke yii em jarigina aa edichistha aa. konchem naa meedha namakam kuda aa poogota aa naku valu yavaru uu vadhu naku nvu kavali amma<br><br>
+    Malli ninnu appudu kalustha aa ani waiting amma..hyderabad appudu vilathamu uu ani waiting amma aa <br><br>
+    manam kalisi chala rojulu ayindhi ee yii nee touch kavali ee naku uu and nee kiss kavali amma <br><br>
+    okati matram uu badha ga vundhi ee amma naku uu .. neku aslu em gift evaleka potuna aa nvu vadhu uu ani antavu uu kani ee prathi love lo edo oka gift expert chestaru uu ga deni vala chala badha pada aa amma😔<br><br>
+    Kani oka vishyam amma ninnu appudu mosam chyli amma.. A vudisam kuda ledhu uu naku.<br><br>
+    Happy Birthday, my life! <br><br>
+    With all my love,<br>
+    Your boy❤️
+  </div>
+
+  <audio id="bg-music" loop>
+    <source src="Inkem-Inkem.mp3" type="audio/mp3" />
+    Your browser does not support the audio tag.
+  </audio>
+
+  <canvas class="fireworks" id="fireworks"></canvas>
+
+  <script>
+    function openLetter() {
+      const letter = document.getElementById("letter");
+      letter.style.display = "block";
+
+      const music = document.getElementById("bg-music");
+      music.currentTime = 15; // start at 15 seconds
+      music.muted = false;
+      music.volume = 1;
+
+      music.play().catch((error) => {
+        console.log("Music play error:", error);
+      });
+    }
+
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Firework {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.particles = [];
+        this.color = color;
+        for (let i = 0; i < 50; i++) {
+          const angle = Math.random() * 2 * Math.PI;
+          const speed = Math.random() * 5 + 1;
+          this.particles.push({
+            x: this.x,
+            y: this.y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+          });
+        }
+      }
+      update() {
+        this.particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.02;
+        });
+      }
+      draw(ctx) {
+        this.particles.forEach((p) => {
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2, 0, 2 * Math.PI);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    const fireworks = [];
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (Math.random() < 0.1) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * (canvas.height / 2);
+        const colors = ["#ffcc00", "#ff6600", "#ffff66", "#ff0066"];
+        fireworks.push(new Firework(x, y, colors[Math.floor(Math.random() * colors.length)]));
+      }
+
+      fireworks.forEach((fw) => {
+        fw.update();
+        fw.draw(ctx);
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
